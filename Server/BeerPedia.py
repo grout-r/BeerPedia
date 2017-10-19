@@ -18,16 +18,20 @@ def hello_world():
 def get_beer():
     return controller.get_beers(mongo)
 
+@app.route('/rate_beer', methods=["POST"])
+def rate_beer():
+    json = request.json
+    if json is None:
+        return "bad_request"
+    return controller.rate_beer(mongo, json["data"])
+
 
 @app.route('/post_beer', methods=["POST"])
 def post_beer():
-    b = request.is_json
-    print(b)
-    r = request
-    print(r)
-    a = request.json
-    print(dumps(a))
-    return controller.post_beer(mongo)
+    json = request.json
+    if json is None:
+        return "bad_request"
+    return controller.post_beer(mongo, json["data"])
 
 
 if __name__ == '__main__':
