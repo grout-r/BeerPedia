@@ -34,6 +34,14 @@ def add_favorite(mongo, json, userid):
     return {"code": 200, "data": "Added"}
 
 
+def remove_favorite(mongo, json, userid):
+    beer = mongo.db.beers.find_one({"_id": ObjectId(json["beer_id"])})
+    if beer is None:
+        return {"code": 400, "data": "Wrong beer ID"}
+    mongo.db.users.update({"_id": userid},  {"$pull": {"favorites": ObjectId(json["beer_id"])}})
+    return {"code": 200, "data": "Removed"}
+
+
 def is_logged(logged_users, json):
     if "token" not in json:
         return None

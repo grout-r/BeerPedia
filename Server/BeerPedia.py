@@ -37,6 +37,17 @@ def add_favorite():
     return make_response(json_util.dumps(users.add_favorite(mongo, json["data"], ObjectId(user["_id"]))))
 
 
+@app.route('/remove_favorite', methods=['GET', 'POST'])
+def remove_favorite():
+    json = request.json
+    if json is None:
+        return "bad_request"
+    user = users.is_logged(logged_users, json)
+    if user is None:
+        return make_response(json_util.dumps({"code": 403, "data": "Wrong token"}))
+    return make_response(json_util.dumps(users.remove_favorite(mongo, json["data"], ObjectId(user["_id"]))))
+
+
 @app.route('/get_beers',  methods=['POST'])
 def get_beer():
     json = request.json
