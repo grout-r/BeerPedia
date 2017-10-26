@@ -1,29 +1,31 @@
 import uuid
-from bson import ObjectId
+from bson import ObjectId, json_util
+from flask import make_response
 
-def register(mongo, json):
+
+def register(mongo, logged_users, json):
     if all(k in json for k in ("username", "email", "password")):
         user = mongo.db.users.find_one({"username": json["username"]})
         if user is not None:
-            return {"code": 200, "data": "User already exists"}
+            return make_response(json_util.dumps({"data": "User already exists"}, 200))
         mongo.db.users.insert_one(json)
-        return {"code": 200, "data": "inserted"}
+        return login(mongo, logged_users, json)
     else:
-        return {"code": 400, "data": "Values are missing"}
+        return make_response(json_util.dumps({"data": "Values are missing"}, 400))
 
 
 def login(mongo, logged_users, json):
     user = mongo.db.users.find_one({"username": json["username"]})
     if user is None:
-        return {"code": 401, "data": "User does not exist"}
+        return make_response(json_util.dumps({"data": "User does not exist"}, 400))
     if user["password"] != json["password"]:
-        return {"code": 401, "data": "Wrong password"}
+        return make_response(json_util.dumps({"data": "Wrong password"}, 401))
     for k, v in logged_users.items():
         if v["username"] == json["username"]:
-            return {"code": 200, "data":  {"me": user, "token": k}}
+            return make_response(json_util.dumps({"data":  {"me": user, "token": k}}, 200))
     token = uuid.uuid4().hex
     logged_users[token] = user
-    return {"code": 200, "data": {"me": user, "token": token}}
+    return make_response(json_util.dumps({"data": {"me": user, "token": token}}, 200))
 
 
 def add_favorite(mongo, json, userid):
@@ -31,7 +33,7 @@ def add_favorite(mongo, json, userid):
     if beer is None:
         return {"code": 400, "data": "Wrong beer ID"}
     mongo.db.users.update({"_id": userid},  {"$addToSet": {"favorites": ObjectId(json["beer_id"])}})
-    return {"code": 200, "data": "Added"}
+    return make_response(json_util.dumps({"data": "Added"}, 200))
 
 
 def remove_favorite(mongo, json, userid):
@@ -39,7 +41,7 @@ def remove_favorite(mongo, json, userid):
     if beer is None:
         return {"code": 400, "data": "Wrong beer ID"}
     mongo.db.users.update({"_id": userid},  {"$pull": {"favorites": ObjectId(json["beer_id"])}})
-    return {"code": 200, "data": "Removed"}
+    return make_response(json_util.dumps({"data": "Removed"}, 200))
 
 
 def is_logged(logged_users, json):

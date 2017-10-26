@@ -1,12 +1,13 @@
 import datetime
-from bson.json_util import dumps
+from bson import json_util
 from bson.objectid import ObjectId
+from flask import make_response
 import datetime
 
 
 def get_beers(mongo):
-    return {"code": 200, "data": dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1}))}
-
+    beers ={"data":  json_util.dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1}))}
+    return make_response(json_util.dumps(beers), 200)
 
 def post_beer(mongo, json):
     if "name" not in json or "country" not in json:
@@ -14,13 +15,13 @@ def post_beer(mongo, json):
     #todo plus de check ?
     json["createdAt"] = datetime.datetime.now()
     mongo.db.beers.insert_one(json)
-    return {"code": 200, "data": "posted"}
+    return make_response({"data": "posted"}, 200)
 
 
 def rate_beer(mongo, json):
     beer = mongo.db.beers.find_one({"_id": ObjectId(json["_id"])})
     if beer is None:
-        return {"code": 400, "data": "bad objectid"}
+        return make_response({"data": "bad objectid"}, 400)
 
     if "rate" in json:
         if "rate" in beer:
@@ -37,15 +38,15 @@ def rate_beer(mongo, json):
         mongo.db.beers.update({"_id": ObjectId(json["_id"])}, {"$addToSet": {"comments": {
                 "date": datetime.datetime.now(), "text": json["comment"]
             }}}, upsert=True)
-    return {"code": 200, "data": "rated"}
+        return make_response({"data": "rated"}, 200)
 
 
 def update_beer(mongo, json):
     if "_id" not in json:
-        return {"code": 400, "data": "No Object Id"}
+        return make_response({"data": "No Object Id"}, 400)
     beer = mongo.db.beers.find_one({"_id": ObjectId(json["_id"])})
     if beer is None:
-        return {"code": 400, "data": "bad objectid"}
+        return make_response({"data": "bad objectid"}, 400)
     mongo.db.beers.update({"_id": ObjectId(json["_id"])}, {"$set": json["fields"]})
-    return {"code": 200, "data": "Updated"}
+    return make_response({"data": "Updated"}, 200)
 
