@@ -7,7 +7,7 @@ def register(mongo, logged_users, json):
     if all(k in json for k in ("username", "email", "password")):
         user = mongo.db.users.find_one({"username": json["username"]})
         if user is not None:
-            return make_response(json_util.dumps({"data": "User already exists"}, 200))
+            return make_response(json_util.dumps({"data": "User already exists"}, 400))
         mongo.db.users.insert_one(json)
         return login(mongo, logged_users, json)
     else:
