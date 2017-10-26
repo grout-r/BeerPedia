@@ -15,7 +15,7 @@ def post_beer(mongo, json):
         return  make_response({"data": "Wrong data"}, 400)
     json["createdAt"] = datetime.datetime.now()
     mongo.db.beers.insert_one(json)
-    return make_response({"data": "posted"}, 200)
+    return make_response(json_util.dumps({"data": "posted"}), 200)
 
 
 def rate_beer(mongo, json):
@@ -58,4 +58,3 @@ def get_beer(mongo, json):
     if beer is None:
         return make_response({"data": "bad objectid"}, 400)
     return make_response(json_util.dumps(beer), 200)
-
