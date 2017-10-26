@@ -6,13 +6,13 @@ import datetime
 
 
 def get_beers(mongo):
-    beers ={"data":  json_util.dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1}))}
+    beers = {"data":  json_util.dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1}))}
     return make_response(json_util.dumps(beers), 200)
+
 
 def post_beer(mongo, json):
     if "name" not in json or "country" not in json:
         return "bad"
-    #todo plus de check ?
     json["createdAt"] = datetime.datetime.now()
     mongo.db.beers.insert_one(json)
     return make_response({"data": "posted"}, 200)
@@ -49,4 +49,13 @@ def update_beer(mongo, json):
         return make_response({"data": "bad objectid"}, 400)
     mongo.db.beers.update({"_id": ObjectId(json["_id"])}, {"$set": json["fields"]})
     return make_response({"data": "Updated"}, 200)
+
+
+def get_beer(mongo, json):
+    if "_id" not in json:
+        return make_response({"data": "No Object Id"}, 400)
+    beer = mongo.db.beers.find_one({"_id": ObjectId(json["_id"])})
+    if beer is None:
+        return make_response({"data": "bad objectid"}, 400)
+    return make_response(json_util.dumps(beer), 200)
 

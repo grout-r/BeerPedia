@@ -46,8 +46,19 @@ def remove_favorite():
     return users.remove_favorite(mongo, json["data"], ObjectId(user["_id"]))
 
 
-@app.route('/get_beers',  methods=['POST'])
+@app.route('/get_beer',  methods=['POST'])
 def get_beer():
+    json = request.json
+    if json is None:
+        return make_response(json_util.dumps({"code": 400, "data": "Bad Request"}), 400)
+    user = users.is_logged(logged_users, json)
+    if user is None:
+        return make_response(json_util.dumps({"code": 403, "data": "Wrong token"}), 403)
+    return controller.get_beer(mongo, json)
+
+
+@app.route('/get_beers',  methods=['POST'])
+def get_beers():
     json = request.json
     if json is None:
         return make_response(json_util.dumps({"code": 400, "data": "Bad Request"}), 400)
