@@ -12,7 +12,7 @@ def get_beers(mongo):
 
 def post_beer(mongo, json):
     if "name" not in json or "country" not in json:
-        return "bad"
+        return  make_response({"data": "Wrong data"}, 400)
     json["createdAt"] = datetime.datetime.now()
     mongo.db.beers.insert_one(json)
     return make_response({"data": "posted"}, 200)
