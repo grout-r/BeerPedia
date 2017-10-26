@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>BeerPedia</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -17,7 +17,7 @@
           <ion-avatar item-start>
             <img src="">
           </ion-avatar>
-          <h2>{{ beer.beer_name}}</h2>
+          <h2>{{ beer.name}}</h2>
         </ion-item>
 
         <ion-card-content>
@@ -30,15 +30,16 @@
     <ion-card>
       <ion-card-content>
         <ion-icon name="sad" item-start></ion-icon>
-        It looks like there is no beer yet... Try to refresh the list by swipping down or had a new one by yourself!
+        It looks like there is no beer yet... Try to refresh the list by swiping down or add a new one by yourself!
       </ion-card-content>
     </ion-card>
   </div>
 
   <ion-fab right bottom>
-    <button ion-fab>
-      <ion-icon name="add">
-      </ion-icon>
-    </button>
+    <button ion-fab><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="top">
+      <button ion-fab [navPush]="pushPage"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab (click)="scanBarCode()"><ion-icon name="barcode"></ion-icon></button>
+    </ion-fab-list>
   </ion-fab>
 </ion-content>
