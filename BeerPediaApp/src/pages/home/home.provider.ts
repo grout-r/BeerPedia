@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from '@angular/http';
-import { Loading } from 'ionic-angular';
+import { ToastController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
@@ -25,29 +25,36 @@ export class HomeService {
 
   private token: String = undefined;
 
-  constructor(private http: Http, private storage: Storage) {
+  constructor(private http: Http, private storage: Storage, private toastCtrl: ToastController) {
     this.storage.get("token").then(token => {
       this.token = token;
     });
     console.log("beerService loaded");
   }
 
+  presentToast(contentString): void {
+    let toast = this.toastCtrl.create({
+      message: contentString,
+      duration: 5000
+    });
+    toast.present();
+  }
+
   register(dataUser): Observable<any> {
     return this.http.post(this.apiUrl + this.registerEP, { data: dataUser })
       .timeout(3000)
       .map(response => {
-        console.log(response.json());
         let data = response.json().data;
-        let code = response.status;
-        console.log("Data received from server after register: " + data);
-        console.log("Code received from server after register: " + code);
-        if (code == 200) {
+        this.storage.set("username", dataUser.username);
+        this.storage.set("password", dataUser.password);
+        return data;
+      })
+      .catch(error => {
+        console.log(error.status);
+        if (error.json().data == "User already exists") {
           this.storage.set("username", dataUser.username);
           this.storage.set("password", dataUser.password);
         }
-        return data;
-      }, error => {
-        console.log(error.json());
         return error;
       });
   }
@@ -57,19 +64,27 @@ export class HomeService {
       .timeout(3000)
       .map(response => {
         let data = response.json().data;
-        let code = response.status;
-        console.log("Data received from server after login: " + data);
-        console.log("Code received from server after login: " + code);
-        if (code == 200) {
-          this.token = data.token;
-          this.storage.set("token", this.token);
-          this.storage.set("username", dataUser.username);
-          this.storage.set("password", dataUser.password);
-        }
+        this.token = data.token;
+        this.storage.set("token", this.token);
+        this.storage.set("username", dataUser.username);
+        this.storage.set("password", dataUser.password);
         return data;
       }, error => {
         console.log(error);
       });
+  }
+
+  relog(): Observable<any> {
+    this.presentToast("Error joining server... Please retry");
+    this.storage.get("username").then(username => {
+      this.storage.get("password").then(password => {
+        if (username && password) {
+          console.log(username, password);
+          return this.login({ username: username, password: password }).subscribe();
+        }
+      });
+    });
+    return new Observable<any>();
   }
 
   getBeer(): Observable<any> {
@@ -78,6 +93,11 @@ export class HomeService {
       .map(response => {
         return response.json();
       }, error => {
+      })
+      .catch(error => {
+        if (error.status == 403) {
+          return this.relog();
+        }
       });
   }
 
@@ -89,16 +109,27 @@ export class HomeService {
       .map(response => {
         let data = response.json().data;
         return JSON.parse(data);
-      }, error => {
-        console.log("serv. err " + error);
-        return error;
+      })
+      .catch(error => {
+        if (error.status == 403) {
+          return this.relog();
+        }
       });
   }
 
   rateBeer(): Observable<any> {
-    return this.http.post(this.apiUrl + this.rateBeerEP, JSON.stringify({
+    return this.http.post(this.apiUrl + this.rateBeerEP, {
       token: this.token
-    }))
+    })
+      .timeout(3000)
+      .map(response => {
+
+      })
+      .catch(error => {
+        if (error.status == 403) {
+          return this.relog();
+        }
+      });
   }
 
   postBeer(dataUser): Observable<any> {
@@ -110,8 +141,11 @@ export class HomeService {
         console.log("Data received from server after login: " + data);
         console.log("Code received from server after login: " + code);
 
-      }, error => {
-        console.log(error);
+      })
+      .catch(error => {
+        if (error.status == 403) {
+          return this.relog();
+        }
       });
   }
 }
