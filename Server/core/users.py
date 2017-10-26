@@ -47,6 +47,8 @@ def remove_favorite(mongo, json, userid):
 def is_logged(logged_users, json):
     if "token" not in json:
         return None
+    print(json["token"])
+    print(logged_users)
     if json["token"] not in logged_users:
         return None
     return logged_users[json["token"]]
