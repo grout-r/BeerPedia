@@ -22,10 +22,12 @@ export class HomePage {
     this.storage.get('token').then(token => {
       if (!token) {
         this.login();
-      } else {
-        this.refreshAutoBeerList();
       }
     });
+  }
+
+  ionViewDidEnter() {
+    this.refreshAutoBeerList();
   }
 
   login(): void {

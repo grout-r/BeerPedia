@@ -23,7 +23,7 @@ export class BeerFormPage {
   }
 
   send(): void {
-    this.beerService.postBeer(this.beerData).subscribe(success => {
+    this.beerService.postBeer(this.beerData, this.navCtrl).subscribe(success => {
 
     }, error => {
 

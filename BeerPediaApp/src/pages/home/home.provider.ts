@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Http } from '@angular/http';
-import { ToastController } from 'ionic-angular';
+import { ToastController, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { Observable } from 'rxjs/Observable';
@@ -13,8 +13,7 @@ import 'rxjs/add/operator/timeout';
 @Injectable()
 export class HomeService {
   // private apiUrl = "http://90.90.66.178:5000";
-  // private apiUrl = "http://127.0.0.1:5000";
-  private apiUrl = "http://192.168.0.46:5000";
+  private apiUrl = "http://127.0.0.1:5000";
   private registerEP = "/register";
   private loginEP = "/login";
   private getBeerEP = "/get_beer";
@@ -50,8 +49,8 @@ export class HomeService {
         return data;
       })
       .catch(error => {
-        console.log(error.status);
-        if (error.json().data == "User already exists") {
+        console.log(error);
+        if (error.data == "User already exists") {
           this.storage.set("username", dataUser.username);
           this.storage.set("password", dataUser.password);
         }
@@ -132,7 +131,7 @@ export class HomeService {
       });
   }
 
-  postBeer(dataUser): Observable<any> {
+  postBeer(dataUser, navCtrl: NavController): Observable<any> {
     return this.http.post(this.apiUrl + this.postBeerEP, { token: this.token, data: dataUser })
       .timeout(3000)
       .map(response => {
@@ -140,7 +139,7 @@ export class HomeService {
         let code = response.status;
         console.log("Data received from server after login: " + data);
         console.log("Code received from server after login: " + code);
-
+        navCtrl.pop();
       })
       .catch(error => {
         if (error.status == 403) {
