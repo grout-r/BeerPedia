@@ -4,6 +4,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Storage } from '@ionic/storage';
 
 import { BeerFormPage } from '../beer-form/beer-form';
+import { BeerPage } from '../beer/beer';
 import { HomeService } from './home.provider';
 
 @Component({
@@ -14,7 +15,7 @@ import { HomeService } from './home.provider';
 export class HomePage {
   private beers: any[];
   private loadAct: Loading;
-  pushPage = BeerFormPage;
+  addBeerPage = BeerFormPage;
 
   constructor(public navCtrl: NavController, private beerService: HomeService, private scanner: BarcodeScanner, private alertCtrl: AlertController, private loadCtrl: LoadingController, private storage: Storage) {
     this.beers = [];
@@ -131,6 +132,10 @@ export class HomePage {
     });
     alert.present();
     return true;
+  }
+
+  openBeerPage(beer: any): void {
+    this.navCtrl.push(BeerPage, { id: beer._id.$oid, name: beer.name });
   }
 
   presentLoading(contentString): void {

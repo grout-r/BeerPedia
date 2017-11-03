@@ -12,10 +12,10 @@
 
   <div *ngIf="beers.length">
     <ion-list *ngFor="let beer of beers">
-      <ion-card>
+      <ion-card (click)="openBeerPage(beer)">
         <ion-item>
           <ion-avatar item-start>
-            <img src="">
+            <img src="img/beer-bottle.jpg">
           </ion-avatar>
           <h2>{{ beer.name}}</h2>
         </ion-item>
@@ -38,7 +38,7 @@
   <ion-fab right bottom>
     <button ion-fab><ion-icon name="add"></ion-icon></button>
     <ion-fab-list side="top">
-      <button ion-fab [navPush]="pushPage"><ion-icon name="add"></ion-icon></button>
+      <button ion-fab [navPush]="addBeerPage"><ion-icon name="add"></ion-icon></button>
       <button ion-fab (click)="scanBarCode()"><ion-icon name="barcode"></ion-icon></button>
     </ion-fab-list>
   </ion-fab>

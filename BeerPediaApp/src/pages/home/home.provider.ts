@@ -49,12 +49,12 @@ export class HomeService {
         return data;
       })
       .catch(error => {
-        console.log(error);
-        if (error.data == "User already exists") {
+        console.log(error.json().data);
+        if (error.json().data == "User already exists") {
           this.storage.set("username", dataUser.username);
           this.storage.set("password", dataUser.password);
         }
-        return error;
+        return error.json().data;
       });
   }
 
@@ -86,8 +86,10 @@ export class HomeService {
     return new Observable<any>();
   }
 
-  getBeer(): Observable<any> {
-    return this.http.get(this.apiUrl + this.getBeerEP)
+  getBeer(beerData): Observable<any> {
+    return this.http.post(this.apiUrl + this.getBeerEP, {
+      token: this.token, _id: beerData
+    })
       .timeout(3000)
       .map(response => {
         return response.json();
@@ -116,13 +118,13 @@ export class HomeService {
       });
   }
 
-  rateBeer(): Observable<any> {
+  rateBeer(reviewData): Observable<any> {
     return this.http.post(this.apiUrl + this.rateBeerEP, {
-      token: this.token
+      token: this.token, data: reviewData
     })
       .timeout(3000)
       .map(response => {
-
+        console.log(response);
       })
       .catch(error => {
         if (error.status == 403) {

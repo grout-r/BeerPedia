@@ -6,11 +6,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { HttpModule } from '@angular/http';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { IonicStorageModule } from '@ionic/storage';
+import { Ionic2RatingModule } from 'ionic2-rating';
 
 import { MyApp } from './app.component';
 import { RegisterPage } from '../pages/register/register';
 import { HomePage } from '../pages/home/home';
 import { BeerFormPage } from '../pages/beer-form/beer-form';
+import { BeerPage } from '../pages/beer/beer';
 
 import { HomeService } from '../pages/home/home.provider';
 
@@ -20,12 +22,14 @@ import { HomeService } from '../pages/home/home.provider';
     RegisterPage,
     HomePage,
     BeerFormPage,
+    BeerPage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
-    HttpModule
+    HttpModule,
+    Ionic2RatingModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -33,6 +37,7 @@ import { HomeService } from '../pages/home/home.provider';
     RegisterPage,
     HomePage,
     BeerFormPage,
+    BeerPage,
   ],
   providers: [
     StatusBar,
