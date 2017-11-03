@@ -39,6 +39,7 @@ Clone the remote repository
 **Launch server**
 
 > cd Server
+
 > python3 BeerPedia.py
 
 You will be able to see the server's log your terminale at this point.
