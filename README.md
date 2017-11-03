@@ -44,4 +44,14 @@ Clone the remote repository
 
 > python3 BeerPedia.py
 
-You will be able to see the server's log your terminale at this point.
+You will be able to see the server's log your terminal at this point.
+
+**Run the app on web browser**
+
+> ionic serve
+This will compile the project and present it on your browser.
+
+**Run the app on anroid smartphone**
+
+> ionic cordova run android
+This will launch the project on your android phone connected with adb.
