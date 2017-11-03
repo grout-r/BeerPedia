@@ -6,7 +6,7 @@ This project is developed by two Epitech students within the context of a Hybrid
 
 The project is a beer manager mobile application. It has been tested with an Android environnement. Apple tech stack is compatible but not officially supported.
 
-The group is composed of two students, Cédric Voinnet and Roman Grout
+The group is composed of two students, Cédric Voinnet and Roman Grout, group #7
 
 ----------
 
