@@ -21,7 +21,7 @@ def post_beer(mongo, json):
 def rate_beer(mongo, json):
     beer = mongo.db.beers.find_one({"_id": ObjectId(json["_id"])})
     if beer is None:
-        return make_response({"data": "bad objectid"}, 400)
+        return make_response(json_util.dumps({"data": "bad objectid"}), 400)
 
     if "rate" in json:
         if "rate" in beer:
@@ -38,7 +38,7 @@ def rate_beer(mongo, json):
         mongo.db.beers.update({"_id": ObjectId(json["_id"])}, {"$addToSet": {"comments": {
                 "date": datetime.datetime.now(), "text": json["comment"]
             }}}, upsert=True)
-        return make_response({"data": "rated"}, 200)
+        return make_response(json_util.dumps({"data": "rated"}), 200)
 
 
 def update_beer(mongo, json):
@@ -48,13 +48,14 @@ def update_beer(mongo, json):
     if beer is None:
         return make_response({"data": "bad objectid"}, 400)
     mongo.db.beers.update({"_id": ObjectId(json["_id"])}, {"$set": json["fields"]})
-    return make_response({"data": "Updated"}, 200)
+    return make_response(json_util.dumps({"data": "Updated"}), 200)
 
 
 def get_beer(mongo, json):
+    print(json_util.dumps(json))
     if "_id" not in json:
-        return make_response({"data": "No Object Id"}, 400)
+        return make_response(json_util.dumps({"data": "No Object Id"}), 400)
     beer = mongo.db.beers.find_one({"_id": ObjectId(json["_id"])})
     if beer is None:
-        return make_response({"data": "bad objectid"}, 400)
+        return make_response(json_util.dumps({"data": "bad objectid"}), 400)
     return make_response(json_util.dumps(beer), 200)
