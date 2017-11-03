@@ -50,7 +50,7 @@ export class RegisterPage {
         },
         error => {
           this.loadAct.dismiss();
-          if (error.json().data == "User already exists") {
+          if (error == "User already exists") {
             this.navCtrl.push(HomePage);
           }
         }
