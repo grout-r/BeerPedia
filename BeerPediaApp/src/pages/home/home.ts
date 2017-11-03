@@ -31,6 +31,12 @@ export class HomePage {
     this.refreshAutoBeerList();
   }
 
+  disconnect(): void {
+    this.storage.remove("token").then(token => {
+      this.navCtrl.pop();
+    })
+  }
+
   login(): void {
     this.storage.get("username").then(username => {
       this.storage.get("password").then(password => {

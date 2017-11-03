@@ -10,6 +10,7 @@
     </ion-refresher-content>
   </ion-refresher>
 
+  <ion-label text-right (click)="disconnect()">Disconnect</ion-label>
   <div *ngIf="beers.length">
     <ion-list *ngFor="let beer of beers">
       <ion-card (click)="openBeerPage(beer)">
