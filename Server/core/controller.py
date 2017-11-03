@@ -6,7 +6,7 @@ import datetime
 
 
 def get_beers(mongo):
-    beers = {"data":  json_util.dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1}))}
+    beers = {"data":  json_util.dumps(mongo.db.beers.find({}, {"name": 1, "_id": 1, "barcode": 1}))}
     return make_response(json_util.dumps(beers), 200)
 
 
