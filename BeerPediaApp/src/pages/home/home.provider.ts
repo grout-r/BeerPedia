@@ -47,14 +47,6 @@ export class HomeService {
         this.storage.set("username", dataUser.username);
         this.storage.set("password", dataUser.password);
         return data;
-      })
-      .catch(error => {
-        console.log(error.json().data);
-        if (error.json().data == "User already exists") {
-          this.storage.set("username", dataUser.username);
-          this.storage.set("password", dataUser.password);
-        }
-        return error.json().data;
       });
   }
 

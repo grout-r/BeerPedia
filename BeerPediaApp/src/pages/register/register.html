@@ -11,27 +11,62 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content center>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Username</ion-label>
-      <ion-input [(ngModel)]="username" type="text"></ion-input>
-    </ion-item>
+<ion-content>
+  <ion-slides pager>
 
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input [(ngModel)]="email" type="email"></ion-input>
-    </ion-item>
+    <ion-slide>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input [(ngModel)]="registerUsername" type="text"></ion-input>
+        </ion-item>
 
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="password" type="password"></ion-input>
-    </ion-item>
+        <ion-item>
+          <ion-label floating>Email</ion-label>
+          <ion-input [(ngModel)]="registerEmail" type="email"></ion-input>
+        </ion-item>
 
-    <ion-item>
-      <button ion-button block padding (click)="register()">Register</button>
-    </ion-item>
-  </ion-list>
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input [(ngModel)]="registerPassword" type="password"></ion-input>
+        </ion-item>
 
+        <ion-item>
+          <button ion-button block padding (click)="register()">Register</button>
+        </ion-item>
+
+        <ion-item>
+          <ion-buttons end>
+          <button ion-button padding (click)="goToLogin()">Login</button>
+        </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Username</ion-label>
+          <ion-input [(ngModel)]="loginUsername" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label floating>Password</ion-label>
+          <ion-input [(ngModel)]="loginPassword" type="password"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button ion-button block padding (click)="login()">Login</button>
+        </ion-item>
+
+        <ion-item>
+          <ion-buttons end>
+          <button ion-button padding (click)="goToRegister()">Register</button>
+        </ion-buttons>
+        </ion-item>
+      </ion-list>
+    </ion-slide>
+
+  </ion-slides>
 
 </ion-content>

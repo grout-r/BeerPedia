@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, Slides } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HomeService } from '../home/home.provider';
@@ -18,31 +18,55 @@ import { HomePage } from '../home/home'
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-  username: any;
-  email: any;
-  password: any;
+  registerUsername: any;
+  registerEmail: any;
+  registerPassword: any;
+  loginUsername: any;
+  loginPassword: any;
   loadAct: any;
+  @ViewChild(Slides) slides: Slides;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private beerService: HomeService, private storage: Storage, private loadCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private beerService: HomeService, private storage: Storage, private loadCtrl: LoadingController, private toastCtrl: ToastController) {
     // this.storage.clear();
     this.loadAct = this.loadCtrl.create();
     this.storage.get('token').then(token => {
       this.storage.get("username").then(username => {
         this.storage.get("password").then(password => {
           console.log("Token dans register: " + token);
+          console.log("Token dans register: " + username);
+          console.log("Token dans register: " + password);
           if (token || (username && password)) {
-            this.navCtrl.push(HomePage);
+            this.loginUsername = username;
+            this.loginPassword = password;
+            this.goToLogin();
           }
         });
       });
     });
   }
 
-
   register(): void {
-    if (this.username && this.email && this.password) {
+    if (this.registerUsername && this.registerEmail && this.registerPassword) {
       this.presentLoading('Registering...');
-      this.beerService.register({ "username": this.username, "email": this.email, "password": this.password }).subscribe(
+      this.beerService.register({ "username": this.registerUsername, "registerEmail": this.registerEmail, "password": this.registerPassword }).subscribe(
+        success => {
+          this.loadAct.dismiss();
+          console.log(success);
+          this.navCtrl.push(HomePage);
+        },
+        error => {
+          this.presentToast('User already exists, please login');
+          this.loadAct.dismiss();
+          this.goToLogin();
+        }
+      );
+    }
+  }
+
+  login(): void {
+    if (this.loginUsername && this.loginPassword) {
+      this.presentLoading('Login...');
+      this.beerService.login({ "username": this.loginUsername, "password": this.loginPassword }).subscribe(
         success => {
           this.loadAct.dismiss();
           console.log(success);
@@ -50,19 +74,31 @@ export class RegisterPage {
         },
         error => {
           this.loadAct.dismiss();
-          if (error == "User already exists") {
-            this.navCtrl.push(HomePage);
-          }
         }
       );
     }
+  }
+
+  goToLogin(): void {
+    this.slides.slideNext();
+  }
+
+  goToRegister(): void {
+    this.slides.slidePrev();
+  }
+
+  presentToast(contentString): void {
+    let toast = this.toastCtrl.create({
+      message: contentString,
+      duration: 5000
+    });
+    toast.present();
   }
 
   presentLoading(contentString): void {
     this.loadAct = this.loadCtrl.create({
       content: contentString
     });
-
     this.loadAct.present();
   }
 }
