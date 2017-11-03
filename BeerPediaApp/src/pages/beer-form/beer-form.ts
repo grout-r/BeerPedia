@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 import { HomeService } from '../home/home.provider';
 
@@ -17,16 +18,26 @@ import { HomeService } from '../home/home.provider';
 })
 
 export class BeerFormPage {
-  beerData = {name: null, country: null};
+  beerData = { name: null, country: null, barcode: null, rate: null, comments: [] };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private loadCtrl: LoadingController, private beerService: HomeService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private loadCtrl: LoadingController, private scanner: BarcodeScanner, private beerService: HomeService) {
+  }
+
+  scanBarCode(): void {
+    this.scanner.scan().then(res => {
+      console.log(res);
+      this.beerData.barcode = res.text
+    }, err => {
+      console.log(err)
+    });
   }
 
   send(): void {
-    this.beerService.postBeer(this.beerData, this.navCtrl).subscribe(success => {
+    if (this.beerData.name && this.beerData.country)
+      this.beerService.postBeer(this.beerData, this.navCtrl).subscribe(success => {
 
-    }, error => {
+      }, error => {
 
-    })
+      })
   }
 }

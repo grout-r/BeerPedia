@@ -29,6 +29,11 @@
     </ion-item>
 
     <ion-item>
+      <button ion-button block icon-start *ngIf="!beerData.barcode" (click)="scanBarCode()"><ion-icon name="barcode"> Scan the beer barcode</ion-icon></button>
+      <button ion-button block icon-start *ngIf="beerData.barcode" color="green"><ion-icon name="checkmark"> Barcode scanned :)</ion-icon></button>
+    </ion-item>
+
+    <ion-item>
       <button ion-button block padding (click)="send()">Send</button>
     </ion-item>
   </ion-list>

@@ -37,10 +37,6 @@
   </div>
 
   <ion-fab right bottom>
-    <button ion-fab><ion-icon name="add"></ion-icon></button>
-    <ion-fab-list side="top">
-      <button ion-fab [navPush]="addBeerPage"><ion-icon name="add"></ion-icon></button>
-      <button ion-fab (click)="scanBarCode()"><ion-icon name="barcode"></ion-icon></button>
-    </ion-fab-list>
+    <button ion-fab [navPush]="addBeerPage"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
 </ion-content>
