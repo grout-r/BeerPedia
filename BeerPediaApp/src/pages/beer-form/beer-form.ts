@@ -18,7 +18,7 @@ import { HomeService } from '../home/home.provider';
 })
 
 export class BeerFormPage {
-  beerData = { name: null, country: null, barcode: null, rate: null, comments: [] };
+  beerData = { name: null, country: null, barcode: null, comments: [] };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private loadCtrl: LoadingController, private scanner: BarcodeScanner, private beerService: HomeService) {
   }

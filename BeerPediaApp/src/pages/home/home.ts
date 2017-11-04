@@ -13,6 +13,7 @@ import { HomeService } from './home.provider';
 })
 
 export class HomePage {
+  private loadedBeerList: any[];
   private beers: any[];
   private loadAct: Loading;
   addBeerPage = BeerFormPage;
@@ -58,6 +59,10 @@ export class HomePage {
     });
   }
 
+  initBeerList(): void {
+    this.beers = this.loadedBeerList;
+  }
+
   scanBarCode(): void {
     this.scanner.scan().then(res => { console.log(res) }, err => { console.log(err) });
   }
@@ -67,11 +72,12 @@ export class HomePage {
       this.beerService.getBeers().subscribe(
         success => {
           this.loadAct.dismiss();
-          console.log(success); this.beers = success;
+          console.log(success);
+          this.loadedBeerList = success;
+          this.initBeerList();
         },
         error => {
           this.loadAct.dismiss();
-          console.log("sub error " + error)
         }
       );
       refresher.complete();
@@ -83,13 +89,37 @@ export class HomePage {
     this.beerService.getBeers().subscribe(
       success => {
         this.loadAct.dismiss();
-        console.log(success); this.beers = success;
+        console.log(success);
+        this.loadedBeerList = success;
+        this.initBeerList();
       },
       error => {
         this.loadAct.dismiss();
-        console.log("sub error " + error);
       }
     );
+  }
+
+  getItems(ev): void {
+    this.initBeerList();
+    let val = ev.target.value;
+    if (val && val.trim() != '') {
+      this.beers = this.beers.filter((item) => {
+        return (item.name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
+  }
+
+  searchByBarcode(): void {
+    this.scanner.scan().then(res => {
+      let beer = this.beers.find(item => {
+        return item.barcode == res.text
+      })
+      if (beer) {
+        this.openBeerPage(beer);
+      }
+    }, err => {
+      console.log(err);
+    })
   }
 
   presentLoginAlert(): boolean {
@@ -148,7 +178,6 @@ export class HomePage {
     this.loadAct = this.loadCtrl.create({
       content: contentString
     });
-
     this.loadAct.present();
   }
 }

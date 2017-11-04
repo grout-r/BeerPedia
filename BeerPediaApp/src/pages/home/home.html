@@ -9,8 +9,17 @@
     <ion-refresher-content pullingText="Pull to refresh..." refreshingText="Refreshing...">
     </ion-refresher-content>
   </ion-refresher>
+  <ion-row>
+    <ion-col>
+      <ion-searchbar (ionInput)="getItems($event)"></ion-searchbar>
+    </ion-col>
+    <ion-col>
+      <button ion-button block icon-only (click)="searchByBarcode()">
+        <ion-icon name="barcode"></ion-icon>
+      </button>
+    </ion-col>
+  </ion-row>
 
-  <ion-label text-right (click)="disconnect()">Disconnect</ion-label>
   <div *ngIf="beers.length">
     <ion-list *ngFor="let beer of beers">
       <ion-card (click)="openBeerPage(beer)">
@@ -18,7 +27,7 @@
           <ion-avatar item-start>
             <img src="img/beer-bottle.jpg">
           </ion-avatar>
-          <h2>{{ beer.name}}</h2>
+          <h2>{{ beer.name }}</h2>
         </ion-item>
 
         <ion-card-content>
@@ -39,4 +48,5 @@
   <ion-fab right bottom>
     <button ion-fab [navPush]="addBeerPage"><ion-icon name="add"></ion-icon></button>
   </ion-fab>
+  <ion-label text-left (click)="disconnect()">Disconnect</ion-label>
 </ion-content>

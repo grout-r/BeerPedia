@@ -12,8 +12,7 @@ import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class HomeService {
-  private apiUrl = "http://192.168.43.208:5000";
-  // private apiUrl = "http://127.0.0.1:5000";
+  private apiUrl = "http://127.0.0.1:5000";
   private registerEP = "/register";
   private loginEP = "/login";
   private getBeerEP = "/get_beer";
