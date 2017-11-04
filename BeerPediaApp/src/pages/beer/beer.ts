@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, Loading, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, Loading, ToastController, Slides } from 'ionic-angular';
 import { Ionic2Rating } from 'ionic2-rating';
 import { HomeService } from '../home/home.provider';
 
@@ -19,10 +19,12 @@ import { HomeService } from '../home/home.provider';
 export class BeerPage {
   id: number;
   name: string;
-  beer = {comments:[]};
+  beer = {comments:[], rate: {avg: 0}};
+  avg = 0;
   rate = 0;
   comment = "";
   private loadAct: Loading;
+  @ViewChild(Slides) slides: Slides;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private loadCtrl: LoadingController, private beerService: HomeService, private toastCtrl: ToastController) {
     this.id = navParams.get('id');
@@ -32,6 +34,7 @@ export class BeerPage {
       this.loadAct.dismiss();
       console.log(success);
       this.beer = success;
+      this.avg = (this.beer.rate) ? this.beer.rate.avg : 0;
     }, error => {
       this.loadAct.dismiss();
     })
@@ -52,6 +55,14 @@ export class BeerPage {
     }, error => {
       this.loadAct.dismiss();
     })
+  }
+
+  rateValue(ev): void {
+    this.moveToComment();
+  }
+
+  moveToComment(): void {
+    this.slides.slideNext();
   }
 
   presentLoading(contentString): void {
