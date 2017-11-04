@@ -17,7 +17,7 @@ Supported features are :
 * Add a beer
 * Rate a beer
 * Add a comment on a beer
-* Add/Remove beer from favorite
+* Add/Remove beer from favorite (not implemented on app)
 * Scan a beer barcode redirect to the details page
  
 
@@ -46,14 +46,15 @@ Clone the remote repository
 
 You will be able to see the server's log your terminal at this point.
 
-**Run the app on web browser**
-
-> ionic serve
-
-This will compile the project and present it on your browser.
-
 **Run the app on anroid smartphone**
 
 > ionic cordova run android
 
 This will launch the project on your android phone connected with adb.
+
+**Run the app on web browser**
+
+> ionic serve
+
+This will compile the project and present it on your browser.
+**IMPORTANT** If you are running the server and the app on a web browser on the same computer, you must dowload an extension to add Access-Control-Allow-Origin, Access-Control-Allow-Methods and Access-Control-Allow-Headers headers for CORS... Such as https://chrome.google.com/webstore/detail/cors-toggle/jioikioepegflmdnbocfhgmpmopmjkim
