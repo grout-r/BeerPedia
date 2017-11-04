@@ -26,7 +26,26 @@ import { HomeService } from '../pages/home/home.provider';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp
+      /*
+   * MODIFY BOOTSTRAP CODE BELOW
+   * Adds a config object that disables scrollAssist and autoFocusAssist for android only
+   * https://github.com/driftyco/ionic/issues/5571
+   */
+      , {
+        platforms: {
+          android: {
+            // These options are available in ionic-angular@2.0.0-beta.2 and up.
+            scrollAssist: false,    // Valid options appear to be [true, false]
+            autoFocusAssist: false  // Valid options appear to be ['instant', 'delay', false]
+          }
+          // http://ionicframework.com/docs/v2/api/config/Config/)
+        }
+      }
+      /*
+       * END MODIFY
+       */
+    ),
     IonicStorageModule.forRoot(),
     HttpModule,
     Ionic2RatingModule

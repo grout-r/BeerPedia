@@ -7,8 +7,9 @@ import { RegisterPage } from '../pages/register/register';
 @Component({
   templateUrl: 'app.html'
 })
+
 export class MyApp {
-  rootPage:any = RegisterPage;
+  rootPage: any = RegisterPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
     platform.ready().then(() => {
